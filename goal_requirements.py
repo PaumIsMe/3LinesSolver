@@ -2,6 +2,9 @@ import itertools
 from collections import deque
 import sys
 import copy
+import requests
+from bs4 import BeautifulSoup
+import json
 
 # Debugging
 print_breakdowns = False
@@ -578,13 +581,41 @@ def print_route_breakdown(route_breakdown):
     for k in sorted(route_breakdown.keys()):
         print(f"\t\t{k} \t{route_breakdown[k]}")
 
-def get_user_lines(user_input):
-    user_lines = []
+def parse_user_input(user_input):
+    if len(user_input) == 1:
+        return None, []
+    board_url = None
+    lines = []
     for str_input in user_input[1:]:
-        user_lines.append(str_input)
+        if (str_input.startswith("https://") or str_input.startswith("http://")):
+            board_url = str_input
+        else:
+            lines.append(str_input)
+            
+    lines = [tuple(lines)] if lines else []
+    return board_url, lines
 
-    print(f"Using User-Submitted lines: {user_lines}")
-    return [tuple(user_lines)]
+def get_board_from_url(url):
+    if url.endswith('/'):
+        url = url[:-1]
+    if not url.endswith('/board'):
+        url += '/board'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        goals_json = next(iter(soup))
+        parsed = json.loads(goals_json)
+        goals = [square['name'] for square in parsed]
+        # turn into a 5x5 matrix
+        goals_matrix = [goals[i:i+5] for i in range(0, 25, 5)]
+        return goals_matrix
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return []
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return []
 
 
 def main():
@@ -594,11 +625,20 @@ def main():
     read_all_goals("goal_requirements.tsv")
     read_discounts("goal_requirements.tsv")
     read_consumables("goal_requirements.tsv")
-    board_goals = get_board_goals("board_goals.txt")
+
+    board_url, user_lines = parse_user_input(sys.argv)
+    if board_url is None:
+        print("Loading board goals from file")
+        board_goals = get_board_goals("board_goals.txt")
+    else:
+        print(f"Loading board goals from {board_url}")
+        board_goals = get_board_from_url(board_url)
+    
     print(f"Board goals detected: {board_goals}")
     
-    if len(sys.argv) > 1:
-        lines_to_check = get_user_lines(sys.argv)
+    if (user_lines):
+        print(f"Using User-Submitted lines: {user_lines[0]}")
+        lines_to_check = user_lines
     else:
         lines_to_check = all_line_combinations(board_goals, 3)
 
