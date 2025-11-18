@@ -104,7 +104,7 @@ Talk to Mask Maker	DVQG - QG Hub, 37	DVDS - Deepnest Hot Spring, 84
 Talk to Midwife	DV, 17									
 Have 4 Rancid Eggs	Lantern Route - 41	Dive Route - 25	Geo !! -60							
 Kill your shade in Jiji's Hut	43									
-Collect 500 essence	0	Essence !! -500								
+Collect 500 essence	Dream Nail	Essence !! -500								
 Dream Wielder	Collect 500 essence, Seer Rewards	Essence !! -500								
 Interact with 5 Cornifer locations	10									
 Flukenest	Flukemarm, 3									
@@ -112,7 +112,7 @@ Stag Nest vessel fragment	Wings - Cliffs, 20	Wingless - Cliffs, 23	Vessel Fragme
 Complete 4 full dream trees	Dream Nail, 200	Essence !! 100								
 Kill 2 Soul Warriors	Dive Route - Shade Soul	Lantern Route - Shade Soul, 41	Geo !! 200							
 Buy 6 maps	28	Geo !! -400								
-Talk to Emilitia (shortcut out of sewers)	59, KSS									
+Talk to Emilitia (shortcut out of sewers)	54, KSS									
 Descending Dark	Dive Route - 100	Lantern Route - Dive Escape, 90								
 Glowing Womb + Grimmchild	Grimmchild, 50									
 Take a bath in all 4 Hot Springs	Deepnest Hot Spring, Edge Hot Spring, 48									
@@ -131,7 +131,7 @@ Pale Lurker	Shade Soul - 53, Edge Hot Spring	DDark - 53, Edge Hot Spring	VS - 53
 Hallownest Crown Pale Ore	78									
 Interact with Cornifer in Waterways	WW Bench, 52									
 Soul Eater + Soul Catcher	Desolate Dive, Dream Nail, 25									
-Talk to Tuk	22									
+Talk to Tuk	22, Sell Lemm									
 Complete the Greenpath Root	Dream Nail, Save the 3 grubs in Queen's Garden, 100									
 										
 										
@@ -173,7 +173,7 @@ City Hot Spring	40, KSS
 Talk to Nailsmith	33, Sell Lemm									
 CDash -> DDark	89									
 DDark -> DNail	105									
-Seer Rewards	19	Geo !! 450								
+Seer Rewards	Dream Nail, 19	Geo !! 450								
 City Storerooms Stag	Dive Route - 0	Lantern Route - City Toll, 28								
 Greenpath Stag	13	Geo!!-140								
 KSS	Lantern Route - 0	Dive Route - Dream Nail, 50								
@@ -194,7 +194,7 @@ DISCOUNTS
 										
 										
 										
-										
+Dreamgate, Shade Cloak Escape	120									
 Flukemarm, Talk to the Fluke Hermit	25									
 SWFC, False Knight + Brooding Mawlek	10									
 Love Key; Spore Shroom Area	26									
@@ -248,3 +248,15 @@ Simple Key - Lurker	50
 Simple Key - Storerooms	50									
 Simple Key - Sly	33									
 Simple Key - Basin	50									
+										
+Essence - Xero 100	Xero - 0	25								
+Essence - Elder Hu 100	Elder Hu - 0	75								
+Essence - Gorb 100	Gorb - 0	Cliffs - 25	75							
+Essence - Marmu 150	Marmu - 0	Unlock Queen's Garden Stag - 40	QG Hub - 182	264						
+Essence - No Eyes 200	No Eyes - 0	Stone Sanctuary, Lumafly Lantern - 58	Stone Sanctuary - 114	Lumafly Lantern - 103	159					
+Essence - Galien 200	Galien - 0	Deepnest Hot Spring - 68	154							
+Essence - Markoth 250	Markoth - 0	Shade Cloak Escape - 90	Shade Cloak, Wings - 165	Shade Cloak - 210	1000					
+Essence - Failed Champion 300	Failed Champion - 0	Shade Soul, False Knight - 131	Shade Soul - 172	DDark, False Knight - 131	DDark - 172	3600				
+Essence - Soul Tyrant 300	Soul Tyrant - 0	Soul Master - 195	Dive Route - 195	1000						
+Essence - Lost Kin 400	Lost Kin - 0	Broken Vessel - 110	Basin - 230	270						
+Essence - Dream Trees 100	Complete 4 full dream trees - 0	200								

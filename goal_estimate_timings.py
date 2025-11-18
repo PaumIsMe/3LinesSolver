@@ -647,7 +647,7 @@ def main():
             total_time = find_total_time(route_breakdown)
             min_time = min(min_time, total_time)
 
-        print(f"{g}: {min_time - assumed_goals_time}")
+        print(f"{g}///{min_time - assumed_goals_time}")
 
 
 if __name__ == '__main__':

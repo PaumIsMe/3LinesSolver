@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
+
 # Debugging
 print_breakdowns = False
 
@@ -24,6 +25,7 @@ idol_consumables = {}
 mask_consumables = {}
 ore_consumables = {}
 key_consumables = {}
+essence_consumables = {}
 
 id_from_tax = {
     "Pale Ore": "pale_ore",
@@ -252,6 +254,8 @@ def get_consumable_set_from_text(name):
         return ore_consumables
     elif name == "Simple Key":
         return key_consumables
+    elif name == "Essence":
+        return essence_consumables
     
     else:
         print(f"Unknown consumable name: {name}")
@@ -324,6 +328,26 @@ def tax_with_count(goal_list, method, time_per_extra):
         return time_per_extra * (required_quantity - obtained_quantity), required_quantity
     else:
         return 0, obtained_quantity
+    
+# Returns the tax and the number of the items the route will get
+def essence_tax(required_goals, method, time_per_extra):
+
+    required_essence = 0
+    obtained_essence = 0
+
+    for g in required_goals:
+        essence = method(g)
+        required_essence = max(required_essence, -1 * essence) # Requirements are expressed as negatives, we negate to get the requirement
+        
+        if essence > 0:
+            obtained_essence += essence
+    
+    local_essence_consumables = copy.deepcopy(essence_consumables)
+    
+    if required_essence <= obtained_essence:
+        return 0, obtained_essence
+    else:
+        return consumable_tax_dynamic(local_essence_consumables, required_essence, required_goals), required_essence
 
     
 # Roughly calculates the amount of geo required for the route vs the amount picked up on the way
@@ -401,7 +425,7 @@ def get_route_breakdown(goals_on_line, config):
         route_breakdown[g.name] = g.get_time()
 
     route_breakdown["Geo Tax"], extra_geo = geo_tax(required_goals, config) # Relics / Money
-    route_breakdown["Essence Tax"], essence_obtained = tax_with_count(required_goals, Goal.get_essence, 0.5) # Essence
+    route_breakdown["Essence Tax"], essence_obtained = essence_tax(required_goals, Goal.get_essence, 0.5) # Essence
     route_breakdown["Pale Ore Tax"] = pale_ore_tax(required_goals, essence_obtained) # Pale Ore
     route_breakdown["Grub Tax"] = tax(required_goals, Goal.get_grub, 10) # Grubs
     route_breakdown["Vessel Fragment Tax"] = tax(required_goals, Goal.get_vessel, 40) # Vessel Fragments
@@ -528,6 +552,40 @@ def consumable_tax(consumable_tax_dictioanry, extras_needed, required_goals):
         total_time += time
         
     return total_time
+
+# TODO - this is really just for essence, we can rename
+def consumable_tax_dynamic(consumable_tax_dictioanry, extras_needed, required_goals):
+
+    acquired_goal_names = set(g.name for g in required_goals)
+    consumable_times = []
+
+    for consumable_name, ways_to_obtain in consumable_tax_dictioanry.items():
+        best_time_to_obtain = 1000
+
+        for necessary_goals, time_for_goal in ways_to_obtain.items():
+            if has_all_goals(necessary_goals, acquired_goal_names):
+                best_time_to_obtain = min(best_time_to_obtain, time_for_goal)
+        
+        consumable_times.append( (consumable_name, best_time_to_obtain, int(consumable_name.split(" ")[-1])) )
+    
+    return calculate_minimum_essence_time(consumable_times, extras_needed)
+
+# Dynamic programming to calculate min essence needed!
+def calculate_minimum_essence_time(consumable_times, extras_needed):
+
+    # dp[x] = minimum time needed to get exactly x reward
+    max_reward = sum(r for _, _, r in consumable_times)
+    INF = 10**18
+
+    dp = [INF] * (max_reward + 1)
+    dp[0] = 0
+
+    for name, time, reward in consumable_times:
+        for r in range(max_reward, reward - 1, -1):
+            dp[r] = min(dp[r], dp[r - reward] + time)
+
+    # find minimum dp[r] where r >= extras_needed
+    return min(dp[extras_needed:])
 
 def all_possible_line_combinations(number_of_lines):
     return itertools.combinations(["R1", "R2", "R3", "R4", "R5", "C1", "C2", "C3", "C4", "C5", "TLBR", "TRBL"], number_of_lines)
