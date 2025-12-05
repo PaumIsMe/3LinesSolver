@@ -51,7 +51,7 @@ Save the 5 grubs in CoT	Desolate Dive, 125	Grubs !! 5
 All Grubs: Greenpath (4) + Fungal (2)	Waterfall, Spore Shroom Area, 90	Grubs !! 6								
 Save the 7 grubs in Crystal Peak	Peaks Elevator, Descending Dark, 82	Grubs !! 7								
 Save the 3 grubs in Waterways	Tram Pass, WW Bench, 125	Grubs !! 3								
-Save the 3 grubs in Queen's Garden	78, Unlock Queen's Garden Stag	Grubs !! 3								
+Save the 3 grubs in Queen's Garden	48, Upper QG Room, Unlock Queen's Garden Stag	Grubs !! 3								
 Save the 5 grubs in Deepnest	Inner Beast's Den, Deepnest Hot Spring, 66	Grubs !! 5								
 Save 15 grubs	0	Grubs !! -15								
 Save 20 grubs	0	Grubs !! -20								
@@ -117,24 +117,31 @@ Descending Dark	Dive Route - 100	Lantern Route - Dive Escape, 90
 Glowing Womb + Grimmchild	Grimmchild, 50									
 Take a bath in all 4 Hot Springs	Deepnest Hot Spring, Edge Hot Spring, 48									
 Hiveblood	17, Hive Knight									
-Hive Knight	Wings, Shade Soul - Ride Tram to Hive, 146	Wings, DDark - Ride Tram to Hive, 132	Wings, VS - Ride Tram to Hive, 185	Wingless, Shade Soul - Ride Tram to Hive, 166	Wingless, DDark - Ride Tram to Hive, 152	Wingless, VS - Ride Tram to Hive, 205				
-Mask Shard  in the Hive	Wings - Ride Tram to Hive, 84	Wingless - Ride Tram to Hive, 102								
+Hive Knight	Shade Soul - Inner Hive, 81	DDark - Inner Hive, 67	VS - Inner Hive, 120							
+Mask Shard  in the Hive	Inner Hive, 20									
 Parry Revek 3 times without dying (Glade of Hope Guard)	Dream Nail, Seer Rewards, 37	Essence !! -200								
 Void Tendrils Journal Entry	Shade Cloak, Hunter's Journal, 19									
 Goam and Garpede Journal Entries	Hunter's Journal, Deepnest Hot Spring, Dive Escape, 48									
 Kill 6 different Stalking Devouts	Shade Soul, DVQG, Wingless - Inner Beast's Den, 40	DDark, DVQG, Wingless - Inner Beast's Den, 40	VS, DVQG, Wingless - Inner Beast's Den, 60	Shade Soul, DVDS - Lumafly Lantern, DV, 70	DDark, DVDS - Lumafly Lantern, DV, 70	VS, DVDS - Lumafly Lantern, DV, 96	Shade Soul, DVQG, Wings - Inner Beast's Den, 140	DDark, DVQG, Wings - Inner Beast's Den, 140	VS, DVQG, Wings - Inner Beast's Den, 160	Geo !! 300
 Kill 4 Mimics	Peaks Elevator, Spore Shroom Area, 45									
 Talk to Bardoon	55									
-Talk to the Fluke Hermit	Wings - WW Bench, Dive Escape, 80	Wingless - WW Bench, Dive Escape, 93								
+Talk to the Fluke Hermit	Wings - Junk Pit, 25	Wingless - Junk Pit, 38								
 Pale Lurker	Shade Soul - 53, Edge Hot Spring	DDark - 53, Edge Hot Spring	VS - 53, Edge Hot Spring							
 										
 Hallownest Crown Pale Ore	78									
 Interact with Cornifer in Waterways	WW Bench, 52									
 Soul Eater + Soul Catcher	Desolate Dive, Dream Nail, 25									
 Talk to Tuk	22, Sell Lemm									
-Complete the Greenpath Root	Dream Nail, Save the 3 grubs in Queen's Garden, 100									
+Complete the Greenpath Root	Dream Nail, Upper QG Room, 100									
+Save the 2 grubs in Hive	Wings - Inner Hive, 52	Wingless - Inner Hive, 61								
+Fungal Core Mask Shard	Monarch Wings, 74									
+Buy the QG and Fog Canyon maps	SWFC, QG Hub, 62									
+Obtain Godtuner	Junk Pit, 29									
+Open 3 geo chests (not in junk pit)	Dive Route - 15	Lantern Route - 90								
 										
 										
+										
+Junk Pit	WW Bench, Desolate Dive, 55									
 Inner Sanctum	Dive Route - 0	Lantern Route - City Toll, 44								
 Defender's Crest	Dung Defender, 10									
 Spore Shroom Area	35									
@@ -185,17 +192,29 @@ SWFC	32
 City Toll	Dive Route - City Storerooms Stag, 20	Lantern Route - Sell Lemm, 44								
 Lantern Route Enjoyer	1222	Geo!!3460	Max Geo !! 760							
 Dive Route Enjoyer	1326	Geo!!3250	Max Geo !! 370							
-Waterfall	57									
+Waterfall	56									
 Dive Escape	Dive Route - 0	Lantern Route - Desolate Dive, 105								
 Salubra Revisit	Dive Route - 0	Lantern Route - 21								
+Complete the Ancestral Mound Root	Wings - Dream Nail, 92	Wingless - Dream Nail, 110								
+Upper QG Room	Unlock Queen's Garden Stag, 30									
+Inner Hive	Wings - 65	Wingless - 79								
+										
+										
+										
+										
+										
+										
+										
+										
+										
 										
 										
 DISCOUNTS										
 										
 										
-										
+Complete 4 full dream trees, Complete the Ancestral Mound Root	50									
 Dreamgate, Shade Cloak Escape	120									
-Flukemarm, Talk to the Fluke Hermit	25									
+Flukemarm, Junk Pit	25									
 SWFC, False Knight + Brooding Mawlek	10									
 Love Key; Spore Shroom Area	26									
 Isma's Tear; All Grubs WW	50									
@@ -215,6 +234,15 @@ Ride Tram to Hive, Unlock Hidden Stag Station	15
 Edge Hub, Talk to Bardoon	25									
 Deep Focus + Quick Focus, Crystal Guardian 1	14									
 Kill 2 Soul Warriors, Lantern Route Enjoyer, Inner Sanctum	21									
+Open 3 geo chests (not in junk pit), Weaversong	30									
+Open 3 geo chests (not in junk pit), Thorns of agony + Baldur Shell + Spore Shroom	30									
+Open 3 geo chests (not in junk pit), Mantis Lords	30									
+Open 3 geo chests (not in junk pit), Watcher Knights	30									
+Open 3 geo chests (not in junk pit), False Knight	30									
+Greenpath (4) + Fungal (2), Open 3 geo chests (not in junk pit)	15									
+										
+										
+										
 										
 CONSUMABLES										
 										
@@ -255,7 +283,7 @@ Essence - Gorb 100	Gorb - 0	Cliffs - 25	75
 Essence - Marmu 150	Marmu - 0	Unlock Queen's Garden Stag - 40	QG Hub - 182	264						
 Essence - No Eyes 200	No Eyes - 0	Stone Sanctuary, Lumafly Lantern - 58	Stone Sanctuary - 114	Lumafly Lantern - 103	159					
 Essence - Galien 200	Galien - 0	Deepnest Hot Spring - 68	154							
-Essence - Markoth 250	Markoth - 0	Shade Cloak Escape - 90	Shade Cloak, Wings - 165	Shade Cloak - 210	1000					
+Essence - Markoth 250	Markoth - 0	Shade Cloak Escape - 90	Shade Cloak, Wings - 165	Shade Cloak - 210	592					
 Essence - Failed Champion 300	Failed Champion - 0	Shade Soul, False Knight - 131	Shade Soul - 172	DDark, False Knight - 131	DDark - 172	3600				
 Essence - Soul Tyrant 300	Soul Tyrant - 0	Soul Master - 195	Dive Route - 195	1000						
 Essence - Lost Kin 400	Lost Kin - 0	Broken Vessel - 110	Basin - 230	270						
