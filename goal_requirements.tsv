@@ -88,7 +88,7 @@ Spend 4000 geo	10	Max Geo !! -4000
 Spend 5000 geo	20	Max Geo !! -5000								
 Pay for 6 tolls	20	Geo !! -200								
 Longnail + MoP	Mantis Lords, 15									
-Fragile Heart, Greed, and Strength	55	Geo !! -1286								
+Fragile Heart, Greed, and Strength	Leg Eater, 20	Geo !! -1286								
 Sprintmaster + Dashmaster	Dashmaster, 15	Geo !! -500								
 Deep Focus + Quick Focus	Salubra Revisit, 54	Geo !! -800								
 Spell Twister + Shaman Stone	Dive Route - 13	Lantern Route - Inner Sanctum, 9								
@@ -133,7 +133,7 @@ Interact with Cornifer in Waterways	WW Bench, 52
 Soul Eater + Soul Catcher	Desolate Dive, Dream Nail, 25									
 Talk to Tuk	22, Sell Lemm									
 Complete the Greenpath Root	Dream Nail, Upper QG Room, 100									
-Save the 2 grubs in Hive	Wings - Inner Hive, 52	Wingless - Inner Hive, 61								
+Save the 2 grubs in Hive	Wings - Desolate Dive, Inner Hive, 52	Wingless - Desolate Dive, Inner Hive, 61								
 Fungal Core Mask Shard	Monarch Wings, 74									
 Buy the QG and Fog Canyon maps	SWFC, QG Hub, 62									
 Obtain Godtuner	Junk Pit, 29									
@@ -157,7 +157,7 @@ TE Shade Skip	Dream Nail, 55
 Oro Bench	52, KSS									
 Stone Sanctuary	45									
 Cliffs	50									
-Grimmchild	69, Dream Nail, Cliffs									
+Grimmchild	Grimm Troupe, 29									
 Brand	93, Hornet 2									
 Deepnest Hot Spring	Spore Shroom Area, 51									
 DV	DVDS - 85, Deepnest Hot Spring	DVQG - QG Hub, 72								
@@ -197,10 +197,10 @@ Dive Escape	Dive Route - 0	Lantern Route - Desolate Dive, 105
 Salubra Revisit	Dive Route - 0	Lantern Route - 21								
 Complete the Ancestral Mound Root	Wings - Dream Nail, 92	Wingless - Dream Nail, 110								
 Upper QG Room	Unlock Queen's Garden Stag, 30									
-Inner Hive	Wings - 65	Wingless - 79								
-										
-										
-										
+Inner Hive	Wings - Ride Tram to Hive, 65	Wingless - Ride Tram to Hive, 79								
+Give Divine a Charm	Grimm Troupe, Leg Eater, 20	Geo !! -250								
+Grimm Troupe	40, Dream Nail, Cliffs									
+Leg Eater	25									
 										
 										
 										
