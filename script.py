@@ -12,6 +12,7 @@ import pstats
 
 # Debugging
 print_breakdowns = False
+timing_debug = False
 
 # Route possibilities
 damage_source = ['DDark', 'Shade Soul', 'VS']
@@ -399,9 +400,9 @@ def geo_tax(goal_list, config):
     geo_debt = final_spent - total_obtained
 
     if geo_debt > 0:
-        return (3 * geo_debt) // 100 , 0, total_obtained
+        return (3 * geo_debt) // 100 , 0, final_spent
     else:
-        return 0, total_obtained - final_spent, total_obtained
+        return 0, total_obtained - final_spent, final_spent
 
 def initialize_goals(c):
     for g in all_goals:
@@ -433,8 +434,10 @@ def get_route_breakdown(goals_on_line, config):
         goals_on_route.add("Shade Soul")
     if "Lantern Route" in config:
         goals_on_route.add("Lantern Route Enjoyer")
+        goals_on_route.add("Lumafly Lantern") # Required to get lantern and spend the 1800 geo
     if "Dive Route" in config:
         goals_on_route.add("Dive Route Enjoyer")
+        goals_on_route.add("False Knight")
 
     initialize_goals(config)
     required_goals = get_all_necessary_goals(goals_on_route)
@@ -452,7 +455,7 @@ def get_route_breakdown(goals_on_line, config):
     route_breakdown["Dream Tree Tax"] = dream_tree_tax(required_goals) # Dream Trees
     route_breakdown["--Total Spent Geo"] = total_geo
 
-    determine_lemm_sell(required_goals, extra_geo)
+    determine_lemm_sell(route_breakdown, required_goals, extra_geo)
 
     # Add all goals (includes base route)
     for g in required_goals:
@@ -462,10 +465,14 @@ def get_route_breakdown(goals_on_line, config):
 
     return route_breakdown
 
-def determine_lemm_sell(required_goals, extra_geo):
+def determine_lemm_sell(route_breakdown, required_goals, extra_geo):
 
     if ("Dive Route Enjoyer" in required_goals and extra_geo < 1450) or ("Lantern Route Enjoyer" in required_goals and extra_geo < 800):
-        required_goals.add("Lemm Sell") 
+        required_goals.add("Lemm Sell")
+        
+        # If we're selling Lemm and getting king's idols, the extra geo is fine
+        if "Collect 3 King's Idols" in required_goals:
+            route_breakdown["Geo Tax"] = max(0, route_breakdown["Geo Tax"] - (3 * 16))
 
 def mask_shard_tax(required_goals, extra_geo):
 
@@ -790,11 +797,16 @@ def main():
     print_route_breakdown(best_route["route_breakdown"])
 
 if __name__ == '__main__':
-    #profiler = cProfile.Profile()
-    #profiler.enable()
-    main()
-    #profiler.disable()
 
-    #stats = pstats.Stats(profiler)
-    #stats.sort_stats("cumulative")
-    #stats.print_stats()
+    if timing_debug:
+        profiler = cProfile.Profile()
+        profiler.enable()
+        main()
+        profiler.disable()
+
+        stats = pstats.Stats(profiler)
+        stats.sort_stats("cumulative")
+        stats.print_stats()
+
+    else:
+        main()
