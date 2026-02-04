@@ -9,9 +9,8 @@ import json
 import cProfile
 import pstats
 
-
 # Debugging
-print_breakdowns = False
+print_breakdowns = True
 timing_debug = False
 
 # Route possibilities
@@ -55,7 +54,7 @@ class Goal:
         self.current_subgoals = set()
         self.current_additional_time = 0
 
-        # Discounts [Pale Ore][Nosk], ex
+        # Discounts
         self.discounts = {}
 
         # Total Consumables
@@ -777,7 +776,6 @@ def main():
                 print_additional_consumables()
 
             update_best_times(best_times, lines, time, config, route_breakdown)
-
 
     best_row_combo = None
     best_route = {"time": 1000000, "config": "Invalid", "route_breakdown": "Invalid"}
