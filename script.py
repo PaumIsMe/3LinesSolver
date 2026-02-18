@@ -796,7 +796,42 @@ def main():
     print(f"Time breakdown:")
     print_route_breakdown(best_route["route_breakdown"])
 
+def main_estimate_timing():
+
+    # Loading
+    read_all_goals("goal_requirements.tsv")
+    read_discounts("goal_requirements.tsv")
+    read_consumables("goal_requirements.tsv")
+
+    assumed_goals = ['KSS', 'Dream Nail', 'Desolate Dive', 'Dive Route Enjoyer', 'Crystal Heart', 'Sell Lemm']
+
+    assumed_goals_time = 1000000
+
+    for config in all_config_combinations():
+
+        route_breakdown = get_route_breakdown(assumed_goals, config)
+        total_time = find_total_time(route_breakdown)
+        assumed_goals_time = min(assumed_goals_time, total_time)
+
+        print(f"{config} - {total_time}")
+
+    for g, gn in all_goals.items():
+
+        min_time = 1000000
+
+        for config in all_config_combinations():
+
+            route_breakdown = get_route_breakdown(assumed_goals + [g], config)
+            total_time = find_total_time(route_breakdown)
+            min_time = min(min_time, total_time)
+
+        print(f"{g}///{min_time - assumed_goals_time}")
+
+    exit()
+
 if __name__ == '__main__':
+
+    # main_estimate_timing() # Uncomment to run estimate timing
 
     if timing_debug:
         profiler = cProfile.Profile()
@@ -810,3 +845,5 @@ if __name__ == '__main__':
 
     else:
         main()
+
+
