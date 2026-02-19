@@ -11,7 +11,7 @@ import pstats
 
 
 # Debugging
-print_breakdowns = False
+print_all_breakdowns = False
 timing_debug = False
 
 # Route possibilities
@@ -368,7 +368,7 @@ def essence_tax(required_goals, method):
     if required_essence <= obtained_essence:
         return 0, obtained_essence
     else:
-        return consumable_tax_dynamic(local_essence_consumables, required_essence, required_goals), required_essence
+        return essence_tax_dynamic(local_essence_consumables, required_essence, required_goals), required_essence
 
     
 # Roughly calculates the amount of geo required for the route vs the amount picked up on the way
@@ -492,7 +492,7 @@ def mask_shard_tax(required_goals, extra_geo):
             local_mask_consumables[f"Sly{idx + 1}"][""] = 8
             extra_geo -= cost
     
-    return consumable_tax(local_mask_consumables, needed_mask_shards, required_goals), extra_geo
+    return consumable_tax("Mask Shard", local_mask_consumables, needed_mask_shards, required_goals), extra_geo
 
 def pale_ore_tax(required_goals, essence_obtained):
 
@@ -515,7 +515,7 @@ def pale_ore_tax(required_goals, essence_obtained):
     local_ore_consumables["Essence"]["Dream Nail"] = 19 + (300 - essence_obtained) # TODO - fix when we have essence rewards
     local_ore_consumables["Essence"]["Seer Rewards"] = (300 - essence_obtained)
 
-    return consumable_tax(local_ore_consumables, needed_pale_ore, required_goals)
+    return consumable_tax("Pale Ore", local_ore_consumables, needed_pale_ore, required_goals)
 
 def dream_tree_tax(required_goals):
 
@@ -527,7 +527,7 @@ def dream_tree_tax(required_goals):
     else:
         return 0
 
-    return consumable_tax(local_dream_tree_consumables, required_dream_trees, required_goals)
+    return consumable_tax("Dream Tree", local_dream_tree_consumables, required_dream_trees, required_goals)
 
 def kings_idol_tax(required_goals, essence_obtained):
 
@@ -544,7 +544,10 @@ def kings_idol_tax(required_goals, essence_obtained):
         local_idol_consumables["Glade"]["Dream Nail"] = 37 + (200 - essence_obtained) # TODO - fix when we have essence rewards
         local_idol_consumables["Glade"]["Seer Rewards"] = 18 + (200 - essence_obtained)
     
-    idol_time = consumable_tax(local_idol_consumables, needed_idols, required_goals)
+    idol_time = consumable_tax("King's Idol", local_idol_consumables, needed_idols, required_goals)
+
+    if idol_time > 122:
+        additional_consumables["King's Idol - We actually just got the edge ones ignore the rest lol"] = 122
 
     return min(idol_time, 122) # If we're getting both edge idols we will never take more than this
 
@@ -575,14 +578,14 @@ def simple_key_tax(required_goals, extra_geo):
     extra_geo -= geo_savings
     local_key_consumables["Sly"][""] = 4 + (((950 - geo_savings) * 3) // 100)
 
-    return consumable_tax(local_key_consumables, needed_simple_keys, required_goals), extra_geo
+    return consumable_tax("Simple Key", local_key_consumables, needed_simple_keys, required_goals), extra_geo
 
 def has_all_goals(necessary_goals_csv, acquired_goal_names):
     if len(necessary_goals_csv) == 0:
         return True
     return csv_as_set(necessary_goals_csv).issubset(acquired_goal_names)
 
-def consumable_tax(consumable_tax_dictioanry, extras_needed, required_goals):
+def consumable_tax(tax_name, consumable_tax_dictioanry, extras_needed, required_goals):
 
     acquired_goal_names = set(g.name for g in required_goals)
     consumable_times = []
@@ -600,46 +603,67 @@ def consumable_tax(consumable_tax_dictioanry, extras_needed, required_goals):
     consumable_times.sort(key = lambda x: x[1])
 
     for goal_name, time in consumable_times[0:extras_needed]:
-        additional_consumables[goal_name] = time
+        additional_consumables[f"{tax_name} - {goal_name}"] = time
         total_time += time
         
     return total_time
 
-# TODO - this is really just for essence, we can rename
-def consumable_tax_dynamic(consumable_tax_dictioanry, extras_needed, required_goals):
+def essence_tax_dynamic(essence_tax_dictionary, essence_needed, required_goals):
 
-    acquired_goal_names = set(g.name for g in required_goals)
-    consumable_times = []
+    acquired_goal_names = {g.name for g in required_goals}
+    essence_options = []
 
-    for consumable_name, ways_to_obtain in consumable_tax_dictioanry.items():
-        best_time_to_obtain = 1000
+    for essence_name, ways_to_obtain in essence_tax_dictionary.items():
+        best_time_to_obtain = float("inf")
 
         for necessary_goals, time_for_goal in ways_to_obtain.items():
             if has_all_goals(necessary_goals, acquired_goal_names):
                 best_time_to_obtain = min(best_time_to_obtain, time_for_goal)
-        
-        consumable_times.append( (consumable_name, best_time_to_obtain, int(consumable_name.split(" ")[-1])) )
-    
-    return calculate_minimum_essence_time(consumable_times, extras_needed)
 
-# Dynamic programming to calculate min essence needed!
-def calculate_minimum_essence_time(consumable_times, extras_needed):
-    INF = 10**10
+        if best_time_to_obtain < float("inf"):
+            essence_reward = int(essence_name.split(" ")[-1])
+            essence_options.append(
+                (essence_name, best_time_to_obtain, essence_reward)
+            )
 
-    # Only care up to extras_needed
-    dp = [INF] * (extras_needed + 1)
+    return calculate_minimum_essence_time(essence_options, essence_needed)
+
+def calculate_minimum_essence_time(essence_options, essence_needed):
+
+    INF = 10**12
+    unit = 50
+
+    scaled_needed = essence_needed // unit
+
+    dp = [INF] * (scaled_needed + 1)
+    choice = [None] * (scaled_needed + 1)
+
     dp[0] = 0
 
-    for _, time, reward in consumable_times:
-        for r in range(extras_needed, -1, -1):
+    # 0/1 knapsack
+    for essence_name, time_cost, reward in essence_options:
+        scaled_reward = reward // unit
+
+        for r in range(scaled_needed, -1, -1):
             if dp[r] == INF:
                 continue
-            new_r = min(extras_needed, r + reward)
-            new_time = dp[r] + time
+
+            new_r = min(scaled_needed, r + scaled_reward)
+            new_time = dp[r] + time_cost
+
             if new_time < dp[new_r]:
                 dp[new_r] = new_time
+                choice[new_r] = (r, essence_name, reward)
 
-    return dp[extras_needed]
+    # ---- Reconstruct path ----
+    current = scaled_needed
+    while current > 0 and choice[current] is not None:
+        previous_r, essence_name, reward = choice[current]
+
+        additional_consumables[f"Essence - {" ".join(essence_name.split(" ")[:-1])}"] = reward
+        current = previous_r
+
+    return dp[scaled_needed]
 
 
 def all_possible_line_combinations(number_of_lines):
@@ -648,14 +672,15 @@ def all_possible_line_combinations(number_of_lines):
 def all_config_combinations():
     return itertools.product(damage_source, initial_route, dv_entrance, wings)
 
-def update_best_times(d, lines, time, config, route_breakdown):
+# Adds new line config to our dictionary, if it is already there only update if it is bigger
+def update_best_times(d, lines, time, config, route_breakdown, additional_consumables):
 
     if lines in d:
         if time < d[lines]["time"]:
-            d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown}
+            d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown, "additional_consumables": additional_consumables}
 
     else:
-        d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown}
+        d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown, "additional_consumables": additional_consumables}
 
 def all_line_combinations(board_goals, num_lines):
     combinations = list(itertools.combinations(all_lines, 3))
@@ -692,7 +717,7 @@ def get_goal_list(lines, board_goals):
 
 def print_route_breakdown(route_breakdown):
     for k in sorted(route_breakdown.keys()):
-        if not ("Tax" in k and route_breakdown[k] == 0): #Ignore taxes of 0
+        if route_breakdown[k] != 0: # Ignore anything that doesn't take time
             print(f"\t\t{k} \t{route_breakdown[k]}")
 
 def parse_user_input(user_input):
@@ -762,8 +787,6 @@ def main():
 
     for lines in lines_to_check:
         required_goals = get_goal_list(lines, board_goals)
-        if print_breakdowns:
-            print(required_goals)
 
         for config in all_config_combinations():
 
@@ -771,12 +794,12 @@ def main():
             route_breakdown = get_route_breakdown(required_goals, config)
             time = find_total_time(route_breakdown)
 
-            if print_breakdowns:
+            if print_all_breakdowns:
                 print(f"\t{config}: {time}")
                 print_route_breakdown(route_breakdown)
                 print_additional_consumables()
 
-            update_best_times(best_times, lines, time, config, route_breakdown)
+            update_best_times(best_times, lines, time, config, route_breakdown, additional_consumables)
 
 
     best_row_combo = None
@@ -790,11 +813,14 @@ def main():
             best_row_combo = row_combination
             best_route = route
 
+    print()
     print(f"Best Rows: \t {best_row_combo}")
     print(f"Estimated Time: \t {best_route['time']}")
     print(f"Suggested Route: \t {best_route['config']}")
     print(f"Time breakdown:")
     print_route_breakdown(best_route["route_breakdown"])
+    print(f"Consumables Chosen:")
+    print_route_breakdown(best_route["additional_consumables"])
 
 def main_estimate_timing():
 
