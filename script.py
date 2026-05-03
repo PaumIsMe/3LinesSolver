@@ -13,6 +13,7 @@ import pstats
 # Debugging
 print_all_breakdowns = False
 timing_debug = False
+number_of_lines = 3
 
 # Route possibilities
 damage_source = ['DDark', 'Shade Soul', 'VS']
@@ -27,6 +28,7 @@ discounts = {}
 # Individual Consumables
 idol_consumables = {}
 mask_consumables = {}
+grub_consumables = {}
 ore_consumables = {}
 key_consumables = {}
 essence_consumables = {}
@@ -254,6 +256,7 @@ def read_consumables(tsv_input):
         for way in rest:
             if "-" in way:
                 goals_needed, time_to_obtain = way.split("-")
+                print(way)
                 time_to_obtain = int(time_to_obtain.strip())
                 ways_to_obtain[goals_needed.strip()] = time_to_obtain
             elif way:
@@ -276,7 +279,7 @@ def get_consumable_set_from_text(name):
     elif name == "Dream Tree":
         return dream_tree_consumables
     elif name == "Grub":
-        return {}
+        return grub_consumables
     else:
         print(f"Unknown consumable name: {name}")
         exit()
@@ -291,7 +294,6 @@ def get_board_goals(board_file_name):
         if '</div></td>' in l:
             parse_l = l[:-11]
             goal_name = parse_l.split('>')[-1]
-            # print(l)
             col = int(l[l.find("col") + 3])
             row = int(l[l.find("row") + 3])
             goal_array[row - 1][col - 1] = goal_name
@@ -447,10 +449,10 @@ def get_route_breakdown(goals_on_line, config):
     route_breakdown["Geo Tax"], extra_geo, total_geo = geo_tax(required_goals, config) # Relics / Money
     route_breakdown["Essence Tax"], essence_obtained = essence_tax(required_goals, Goal.get_essence) # Essence
     route_breakdown["Pale Ore Tax"] = pale_ore_tax(required_goals, essence_obtained) # Pale Ore
-    route_breakdown["Grub Tax"] = tax(required_goals, Goal.get_grub, 10) # Grubs
+    route_breakdown["Grub Tax"] = grub_tax(required_goals) # Grubs
     route_breakdown["Vessel Fragment Tax"] = tax(required_goals, Goal.get_vessel, 40) # Vessel Fragments
-    route_breakdown["Simple Key Tax"], extra_geo = simple_key_tax(required_goals, extra_geo)
     route_breakdown["Mask Shard Tax"], extra_geo = mask_shard_tax(required_goals, extra_geo) # Mask Shards
+    route_breakdown["Simple Key Tax"], extra_geo = simple_key_tax(required_goals, extra_geo)
     route_breakdown["King's Idol Tax"] = kings_idol_tax(required_goals, essence_obtained)
     route_breakdown["Dream Tree Tax"] = dream_tree_tax(required_goals) # Dream Trees
     route_breakdown["--Total Spent Geo"] = total_geo
@@ -493,6 +495,23 @@ def mask_shard_tax(required_goals, extra_geo):
             extra_geo -= cost
     
     return consumable_tax("Mask Shard", local_mask_consumables, needed_mask_shards, required_goals), extra_geo
+
+def grub_tax(required_goals):
+
+    acquired_goal_names = set(g.name for g in required_goals)
+
+    if "Save 20 grubs" in acquired_goal_names:
+        needed_grubs = 20
+    elif "Save 15 grubs" in acquired_goal_names:
+        needed_grubs = 15
+    elif "Grubsong" in acquired_goal_names:
+        needed_grubs = 10
+    else:
+        return 0
+
+    local_grub_consumables = copy.deepcopy(grub_consumables)
+    
+    return consumable_tax("Grub", local_grub_consumables, needed_grubs, required_goals)
 
 def pale_ore_tax(required_goals, essence_obtained):
 
@@ -547,7 +566,7 @@ def kings_idol_tax(required_goals, essence_obtained):
     idol_time = consumable_tax("King's Idol", local_idol_consumables, needed_idols, required_goals)
 
     if idol_time > 122:
-        additional_consumables["King's Idol - We actually just got the edge ones ignore the rest lol"] = 122
+        additional_consumables["King's Idol - EDGE IDOLS STAY WINNING"] = 122
 
     return min(idol_time, 122) # If we're getting both edge idols we will never take more than this
 
@@ -629,41 +648,41 @@ def essence_tax_dynamic(essence_tax_dictionary, essence_needed, required_goals):
     return calculate_minimum_essence_time(essence_options, essence_needed)
 
 def calculate_minimum_essence_time(essence_options, essence_needed):
-
     INF = 10**12
     unit = 50
 
     scaled_needed = essence_needed // unit
 
-    dp = [INF] * (scaled_needed + 1)
-    choice = [None] * (scaled_needed + 1)
-
-    dp[0] = 0
+    # dp[r] = (min_time, path_taken)
+    dp = [(INF, []) for _ in range(scaled_needed + 1)]
+    dp[0] = (0, [])
 
     # 0/1 knapsack
     for essence_name, time_cost, reward in essence_options:
         scaled_reward = reward // unit
 
         for r in range(scaled_needed, -1, -1):
-            if dp[r] == INF:
+            current_time, path = dp[r]
+            if current_time == INF:
                 continue
 
             new_r = min(scaled_needed, r + scaled_reward)
-            new_time = dp[r] + time_cost
+            new_time = current_time + time_cost
 
-            if new_time < dp[new_r]:
-                dp[new_r] = new_time
-                choice[new_r] = (r, essence_name, reward)
+            if new_time < dp[new_r][0]:
+                dp[new_r] = (
+                    new_time,
+                    path + [(essence_name, time_cost)]
+                )
 
-    # ---- Reconstruct path ----
-    current = scaled_needed
-    while current > 0 and choice[current] is not None:
-        previous_r, essence_name, reward = choice[current]
+    # ---- Reconstruct result ----
+    total_time, path = dp[scaled_needed]
 
-        additional_consumables[f"Essence - {" ".join(essence_name.split(" ")[:-1])}"] = reward
-        current = previous_r
+    for essence_name, time_cost in path:
+        key = f"Essence - {' '.join(essence_name.split(' ')[:-1])}"
+        additional_consumables[key] = additional_consumables.get(key, 0) + time_cost
 
-    return dp[scaled_needed]
+    return total_time
 
 
 def all_possible_line_combinations(number_of_lines):
@@ -675,12 +694,18 @@ def all_config_combinations():
 # Adds new line config to our dictionary, if it is already there only update if it is bigger
 def update_best_times(d, lines, time, config, route_breakdown, additional_consumables):
 
+    entry = {
+        "time": time,
+        "config": config,
+        "route_breakdown": route_breakdown,
+        "additional_consumables": additional_consumables.copy()
+    }
+
     if lines in d:
         if time < d[lines]["time"]:
-            d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown, "additional_consumables": additional_consumables}
-
+            d[lines] = entry
     else:
-        d[lines] = {"time": time, "config": config, "route_breakdown": route_breakdown, "additional_consumables": additional_consumables}
+        d[lines] = entry
 
 def all_line_combinations(board_goals, num_lines):
     combinations = list(itertools.combinations(all_lines, 3))
@@ -717,7 +742,7 @@ def get_goal_list(lines, board_goals):
 
 def print_route_breakdown(route_breakdown):
     for k in sorted(route_breakdown.keys()):
-        if route_breakdown[k] != 0: # Ignore anything that doesn't take time
+        if route_breakdown[k] != 0 or "-" in k: # Ignore anything that doesn't take time if it's not a consumable
             print(f"\t\t{k} \t{route_breakdown[k]}")
 
 def parse_user_input(user_input):
@@ -783,7 +808,7 @@ def main():
         print(f"Using User-Submitted lines: {user_lines[0]}")
         lines_to_check = user_lines
     else:
-        lines_to_check = all_line_combinations(board_goals, 3)
+        lines_to_check = all_line_combinations(board_goals, 4)
 
     for lines in lines_to_check:
         required_goals = get_goal_list(lines, board_goals)
