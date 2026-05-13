@@ -42,7 +42,8 @@ id_from_tax = {
     "Vessel Fragment" : "vessel",
     "Mask Shard" : "mask",
     "Geo" : "geo",
-    "Max Geo": "max_geo"
+    "Max Geo": "max_geo",
+    "Hard Save": "hard_save"
 }
 
 # Track consumables needed for tax
@@ -69,6 +70,7 @@ class Goal:
         self.mask = 0
         self.geo = 0
         self.max_geo = 0
+        self.hard_save = 0
 
         self.set_ways_to_achieve(possibilities)
 
@@ -151,6 +153,9 @@ class Goal:
 
     def get_discounts(self):
         return self.discounts
+    
+    def get_hard_save(self):
+        return self.hard_save
 
 def values_as_set(values_string, delim):
     return {value.strip() for value in values_string.split(delim)}
@@ -403,6 +408,47 @@ def geo_tax(goal_list, config):
         return (3 * geo_debt) // 100 , 0, final_spent
     else:
         return 0, total_obtained - final_spent, final_spent
+    
+def apply_hard_save(goal_list):
+
+    goal_list_names = set(g.get_name() for g in goal_list)
+
+    # Get all goals with hardsaves
+    hard_save_goals = [g for g in goal_list if g.get_hard_save() != 0]
+    new_hard_save_goals = []
+
+    # Do not add goals that are not technically a hard save
+    for g in hard_save_goals:
+
+        # Simple cases
+        if g.name == "Shade Cloak" and "Shade Cloak Escape" in goal_list_names:
+            continue
+        if g.name == "Desolate Dive" and "Dive Escape" in goal_list_names:
+            continue
+
+        # Tram where you do not end on a hard save
+        if g.name == "Tram Pass":
+
+            # Tram is not a hard save
+            if "Unlock Hidden Station Stag" in goal_list_names or "DV" in goal_list_names:
+                continue
+            # Tram must be left from, even if it is the only hard save
+            elif "Buy 8 map pins from Iselda (All)" in goal_list_names or "Tram Pass + Visit all 5 Tram Stations" in goal_list_names:
+                additional_consumables["Hard Save - Tram Pass"] = g.get_hard_save()
+                continue
+
+        # All other goals are added
+        new_hard_save_goals.append(g)
+    hard_save_goals = new_hard_save_goals
+        
+    if len(hard_save_goals) == 0:
+        return
+
+    min_goal = max(hard_save_goals, key=lambda goal: goal.get_hard_save())
+    remaining_goals = [goal for goal in hard_save_goals if goal is not min_goal]
+    for goal in remaining_goals:
+        additional_consumables[f"Hard Save - {goal.name}"] = goal.get_hard_save()
+
 
 def initialize_goals(c):
     for g in all_goals:
@@ -439,6 +485,7 @@ def get_route_breakdown(goals_on_line, config):
     if "Dive Route" in config:
         goals_on_route.add("Dive Route Enjoyer")
         goals_on_route.add("False Knight")
+        goals_on_route.add("Dive Escape")
 
     required_goals = get_all_necessary_goals(goals_on_route)
 
@@ -462,6 +509,7 @@ def get_route_breakdown(goals_on_line, config):
         route_breakdown[g.name] = g.get_time()
 
     apply_discounts(route_breakdown, required_goals)
+    apply_hard_save(required_goals)
 
     return route_breakdown
 
@@ -785,7 +833,7 @@ def get_board_from_url(url):
         goals = [square['name'] for square in parsed]
         # turn into a 5x5 matrix
         goals_matrix = [goals[i:i+5] for i in range(0, 25, 5)]
-        print(f"Loaded board goals {datetime.now()}", flush=True)
+        print(f"Loaded board goals...", flush=True)
         return goals_matrix
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
@@ -809,10 +857,10 @@ def main():
 
     board_url, user_lines = parse_user_input(sys.argv)
     if board_url is None:
-        print("Loading board goals from file")
+        print("Loading board goals from file", flush=True)
         board_goals = get_board_goals("board_goals.txt")
     else:
-        print(f"Loading board goals from {board_url}")
+        print(f"Loading board goals from {board_url}", flush=True)
         board_goals = get_board_from_url(board_url)
     
     print(f"Board goals detected: {board_goals}")
@@ -897,7 +945,6 @@ def main_estimate_timing():
 if __name__ == '__main__':
 
     # main_estimate_timing() # Uncomment to run estimate timing
-    print(datetime.now())
 
     if timing_debug:
         profiler = cProfile.Profile()
@@ -911,6 +958,5 @@ if __name__ == '__main__':
 
     else:
         main()
-        print(datetime.now())
 
 

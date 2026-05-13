@@ -89,7 +89,7 @@ Spend 5000 geo	20	Max Geo !! -5000
 Pay for 6 tolls	20	Geo !! -200								
 Longnail + MoP	Mantis Lords, 15									
 Fragile Heart, Greed, and Strength	Leg Eater, 17	Geo !! -1286								
-Sprintmaster + Dashmaster	Dashmaster, 15	Geo !! -500								
+Sprintmaster + Dashmaster	Dashmaster, 15	Geo !! -400								
 Deep Focus + Quick Focus	Salubra Revisit, 54	Geo !! -800								
 Spell Twister + Shaman Stone	Dive Route - 13	Lantern Route - Inner Sanctum, 9								
 Lifeblood Heart + Joni's Blessing	Joni's Blessing	Geo !! -250								
@@ -99,10 +99,10 @@ Sharp Shadow	Shade Cloak Escape, Deepnest Hot Spring, 31
 Shape of Unn	Wings - 58, Greenpath Stag	Wingless - 58, Isma's Tear, Greenpath Stag								
 Thorns of agony + Baldur Shell + Spore Shroom	Greenpath Stag, Spore Shroom Area, 123									
 Quick Slash	41, Oro Bench, Dive Escape									
-Heavy Blow + Steady Body	Salubra Revisit, 15	Geo !! -470								
+Heavy Blow + Steady Body	Salubra Revisit, 15	Geo !! -470	Hard Save !! 20							
 Talk to Mask Maker	DVQG - QG Hub, 37	DVDS - Deepnest Hot Spring, 84								
 Talk to Midwife	DV, 17									
-Have 4 Rancid Eggs	Lantern Route - 41	Dive Route - 25	Geo !! -60							
+Have 4 Rancid Eggs	Lantern Route - 41	Dive Route - 25	Geo !! -60	Hard Save !! 10						
 Kill your shade in Jiji's Hut	43									
 Collect 500 essence	Dream Nail	Essence !! -500								
 Dream Wielder	Collect 500 essence, Seer Rewards	Essence !! -500								
@@ -154,7 +154,7 @@ Ride Tram to Hive	Tram Pass, 49
 Basin	40, KSS									
 False Knight	Dive Route - 0	Lantern Route - 41								
 Shade Cloak Escape	Wings - Shade Cloak, 70	Wingless - Shade Cloak, 120								
-Tram Pass	Deepnest Hot Spring, 71									
+Tram Pass	Deepnest Hot Spring, 71	Hard Save !! 2								
 TE Shade Skip	Dream Nail, 55									
 Oro Bench	52, KSS									
 Stone Sanctuary	45									
@@ -178,7 +178,7 @@ DDark -> DNail	105
 Seer Rewards	Dream Nail, 19									
 City Storerooms Stag	Dive Route - 0	Lantern Route - 69								
 Greenpath Stag	13	Geo!!-140								
-KSS	Lantern Route - 0	Dive Route - 60								
+KSS	Lantern Route - 0	Dive Route - 60	Geo !! -300							
 Inner Beast's Den	Wings - DV, 36	Wingless - DV, 92								
 Dashmaster	33									
 Peaks Elevator	Wings - 20	Wingless - Crystal Guardian 1, 43								
@@ -248,7 +248,7 @@ Tram Pass + Visit all 5 Tram Stations; Unlock Hidden Stag Station	15
 Stone Sanctuary; Waterfall	45									
 Waterfall; Hunter's Journal	16									
 Complete the Ancestral Mound Root ; SWFC	5									
-										
+Kill 4 Mimics ; Monarch Wings ; Crystal Guardian 2	20									
 										
 										
 										
@@ -347,10 +347,10 @@ Grub - Collector 1	Collector - 3	Edge Hub - 70	Love Key - 83
 Grub - Collector 2	Collector - 3	Edge Hub - 70	Love Key - 83							
 Grub - Collector 3	Collector - 3	Edge Hub - 70	Love Key - 83							
 										
-Grub - Basin Dive	Basin - 24	KSS - 52	100							
-Grub - Basin Wings	Unlock Hidden Station Stag - 23	Monarch Wings - 28	100							
+Grub - Basin Dive	Basin - 24	KSS - 52	Save the 2 grubs in Basin - 0	100						
+Grub - Basin Wings	Unlock Hidden Station Stag - 23	Monarch Wings - 28	Save the 2 grubs in Basin - 0	100						
 										
-Grub - Edge Spikes	Hornet 2 - 23	100								
+Grub - Edge Spikes	Hornet 2 - 23	47								
 Grub - Oro	Oro Bench - 25	Quick Slash - 13	Break the 420 geo rock in Kingdom's Edge - 6	100						
 										
 Grub - Deepnest Mimic	Spore Shroom Area - 22	Kill 4 Mimics - 0	57	Deepnest Hot Spring - 24						
