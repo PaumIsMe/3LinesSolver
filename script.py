@@ -5,6 +5,7 @@ import copy
 import requests
 from bs4 import BeautifulSoup
 import json
+from datetime import datetime
 
 import cProfile
 import pstats
@@ -256,7 +257,6 @@ def read_consumables(tsv_input):
         for way in rest:
             if "-" in way:
                 goals_needed, time_to_obtain = way.split("-")
-                print(way)
                 time_to_obtain = int(time_to_obtain.strip())
                 ways_to_obtain[goals_needed.strip()] = time_to_obtain
             elif way:
@@ -364,13 +364,11 @@ def essence_tax(required_goals, method):
         if essence > 0:
             obtained_essence += essence
     
-    local_essence_consumables = copy.deepcopy(essence_consumables)
-    
     # Returns (required, obtained)
     if required_essence <= obtained_essence:
         return 0, obtained_essence
     else:
-        return essence_tax_dynamic(local_essence_consumables, required_essence, required_goals), required_essence
+        return essence_tax_dynamic(essence_consumables, required_essence, required_goals), required_essence
 
     
 # Roughly calculates the amount of geo required for the route vs the amount picked up on the way
@@ -437,11 +435,11 @@ def get_route_breakdown(goals_on_line, config):
     if "Lantern Route" in config:
         goals_on_route.add("Lantern Route Enjoyer")
         goals_on_route.add("Lumafly Lantern") # Required to get lantern and spend the 1800 geo
+        goals_on_route.add("KSS") # Required to spend 300 geo
     if "Dive Route" in config:
         goals_on_route.add("Dive Route Enjoyer")
         goals_on_route.add("False Knight")
 
-    initialize_goals(config)
     required_goals = get_all_necessary_goals(goals_on_route)
 
     route_breakdown = {}
@@ -474,7 +472,7 @@ def determine_lemm_sell(route_breakdown, required_goals, extra_geo):
         
         # If we're selling Lemm and getting king's idols, the extra geo is fine
         if "Collect 3 King's Idols" in required_goals:
-            route_breakdown["Geo Tax"] = max(0, route_breakdown["Geo Tax"] - (3 * 16))
+            route_breakdown["Geo Tax"] = max(0, route_breakdown["Geo Tax"] - (3 * 16)) # 3 seconds per 100 geo times 1600 geo [two extra idols]
 
 def mask_shard_tax(required_goals, extra_geo):
 
@@ -487,11 +485,13 @@ def mask_shard_tax(required_goals, extra_geo):
     else:
         return 0, extra_geo
 
-    local_mask_consumables = copy.deepcopy(mask_consumables)
+    local_mask_consumables = mask_consumables.copy()
 
-    for idx, cost in enumerate([150, 500, 800, 1500]):
+    for idx, cost in enumerate((150, 500, 800, 1500), start=1):
         if extra_geo >= cost:
-            local_mask_consumables[f"Sly{idx + 1}"][""] = 8
+            sly = mask_consumables[f"Sly{idx}"].copy()
+            sly[""] = 8
+            local_mask_consumables[f"Sly{idx}"] = sly
             extra_geo -= cost
     
     return consumable_tax("Mask Shard", local_mask_consumables, needed_mask_shards, required_goals), extra_geo
@@ -508,10 +508,8 @@ def grub_tax(required_goals):
         needed_grubs = 10
     else:
         return 0
-
-    local_grub_consumables = copy.deepcopy(grub_consumables)
     
-    return consumable_tax("Grub", local_grub_consumables, needed_grubs, required_goals)
+    return consumable_tax("Grub", grub_consumables, needed_grubs, required_goals)
 
 def pale_ore_tax(required_goals, essence_obtained):
 
@@ -526,27 +524,31 @@ def pale_ore_tax(required_goals, essence_obtained):
     else:
         return 0
 
-    local_ore_consumables = copy.deepcopy(ore_consumables)
+    local_ore_consumables = ore_consumables.copy()
 
     if essence_obtained > 300:
         essence_obtained = 300
 
-    local_ore_consumables["Essence"]["Dream Nail"] = 19 + (300 - essence_obtained) # TODO - fix when we have essence rewards
-    local_ore_consumables["Essence"]["Seer Rewards"] = (300 - essence_obtained)
+    remaining_essence = 300 - essence_obtained
+
+    essence = ore_consumables["Essence"].copy()
+    essence["Dream Nail"] = 19 + remaining_essence
+    essence["Seer Rewards"] = remaining_essence
+
+    local_ore_consumables["Essence"] = essence
 
     return consumable_tax("Pale Ore", local_ore_consumables, needed_pale_ore, required_goals)
 
 def dream_tree_tax(required_goals):
 
     acquired_goal_names = set(g.name for g in required_goals)
-    local_dream_tree_consumables = copy.deepcopy(dream_tree_consumables)
 
     if "Complete 4 full dream trees" in acquired_goal_names:
         required_dream_trees = 4
     else:
         return 0
 
-    return consumable_tax("Dream Tree", local_dream_tree_consumables, required_dream_trees, required_goals)
+    return consumable_tax("Dream Tree", dream_tree_consumables, required_dream_trees, required_goals)
 
 def kings_idol_tax(required_goals, essence_obtained):
 
@@ -557,11 +559,16 @@ def kings_idol_tax(required_goals, essence_obtained):
     else:
         return 0
 
-    local_idol_consumables = copy.deepcopy(idol_consumables)
+    local_idol_consumables = idol_consumables.copy()
 
     if essence_obtained < 200:
-        local_idol_consumables["Glade"]["Dream Nail"] = 37 + (200 - essence_obtained) # TODO - fix when we have essence rewards
-        local_idol_consumables["Glade"]["Seer Rewards"] = 18 + (200 - essence_obtained)
+        remaining_essence = 200 - essence_obtained
+
+        glade = idol_consumables["Glade"].copy()
+        glade["Dream Nail"] = 37 + remaining_essence # TODO - write with correct essence tax ideally, this assumes 1 essence per
+        glade["Seer Rewards"] = 18 + remaining_essence
+
+        local_idol_consumables["Glade"] = glade
     
     idol_time = consumable_tax("King's Idol", local_idol_consumables, needed_idols, required_goals)
 
@@ -591,11 +598,15 @@ def simple_key_tax(required_goals, extra_geo):
     if needed_simple_keys == 0:
         return 0, extra_geo
     
-    local_key_consumables = copy.deepcopy(key_consumables)
+    local_key_consumables = key_consumables.copy()
 
     geo_savings = min(extra_geo, 950)
     extra_geo -= geo_savings
-    local_key_consumables["Sly"][""] = 4 + (((950 - geo_savings) * 3) // 100)
+
+    sly = key_consumables["Sly"].copy()
+    sly[""] = 4 + (((950 - geo_savings) * 3) // 100)
+
+    local_key_consumables["Sly"] = sly
 
     return consumable_tax("Simple Key", local_key_consumables, needed_simple_keys, required_goals), extra_geo
 
@@ -604,6 +615,7 @@ def has_all_goals(necessary_goals_csv, acquired_goal_names):
         return True
     return csv_as_set(necessary_goals_csv).issubset(acquired_goal_names)
 
+# TODO - would be much faster if we converted csv as a set from the start
 def consumable_tax(tax_name, consumable_tax_dictioanry, extras_needed, required_goals):
 
     acquired_goal_names = set(g.name for g in required_goals)
@@ -773,6 +785,7 @@ def get_board_from_url(url):
         goals = [square['name'] for square in parsed]
         # turn into a 5x5 matrix
         goals_matrix = [goals[i:i+5] for i in range(0, 25, 5)]
+        print(f"Loaded board goals {datetime.now()}", flush=True)
         return goals_matrix
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
@@ -810,11 +823,12 @@ def main():
     else:
         lines_to_check = all_line_combinations(board_goals, 4)
 
-    for lines in lines_to_check:
-        required_goals = get_goal_list(lines, board_goals)
+    for config in all_config_combinations():
+        initialize_goals(config)
 
-        for config in all_config_combinations():
-
+        for lines in lines_to_check:
+            required_goals = get_goal_list(lines, board_goals)
+        
             additional_consumables.clear()
             route_breakdown = get_route_breakdown(required_goals, config)
             time = find_total_time(route_breakdown)
@@ -883,6 +897,7 @@ def main_estimate_timing():
 if __name__ == '__main__':
 
     # main_estimate_timing() # Uncomment to run estimate timing
+    print(datetime.now())
 
     if timing_debug:
         profiler = cProfile.Profile()
@@ -896,5 +911,6 @@ if __name__ == '__main__':
 
     else:
         main()
+        print(datetime.now())
 
 
