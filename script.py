@@ -10,7 +10,6 @@ from datetime import datetime
 import cProfile
 import pstats
 
-
 # Debugging
 print_all_breakdowns = False
 timing_debug = False
@@ -18,9 +17,10 @@ number_of_lines = 3
 
 # Route possibilities
 damage_source = ['DDark', 'Shade Soul', 'VS']
-initial_route = ['Lantern Route', 'Dive Route']
+initial_route = ['Lantern Route', 'Left Side Dive Route', 'Right Side Dive Route']
 dv_entrance = ['DVQG', 'DVDS']
 wings = ['Wings', 'Wingless']
+early_qss = ["Early Queens", "Skip Queens"]
 
 # Global variables (should pass these every time but nahhh)
 all_goals = {}
@@ -228,7 +228,7 @@ def read_discounts(tsv_input):
         for goal in discount_goals:
             if goal not in all_goals:
                 print(f"Goal {goal} found in discounts but not found in all goals. Exiting...")
-                exit(0)
+                exit(-1)
 
         discounts[tuple(discount_goals)] = timesave
 
@@ -287,7 +287,7 @@ def get_consumable_set_from_text(name):
         return grub_consumables
     else:
         print(f"Unknown consumable name: {name}")
-        exit()
+        exit(-1)
 
 def get_board_goals(board_file_name):
     file = open(board_file_name).read().strip()
@@ -375,7 +375,6 @@ def essence_tax(required_goals, method):
     else:
         return essence_tax_dynamic(essence_consumables, required_essence, required_goals), required_essence
 
-    
 # Roughly calculates the amount of geo required for the route vs the amount picked up on the way
 def geo_tax(goal_list, config):
 
@@ -405,7 +404,10 @@ def geo_tax(goal_list, config):
     geo_debt = final_spent - total_obtained
 
     if geo_debt > 0:
-        return (3 * geo_debt) // 100 , 0, final_spent
+        # Integral from g0 to g1 of 0.01 + .000009g dg
+        # Todo - change integral to just be additional money
+        time_to_get_remaining_geo = (0.01) * (final_spent - total_obtained) + (0.0000045) * (final_spent * final_spent - total_obtained * total_obtained)
+        return int(time_to_get_remaining_geo), 0, final_spent
     else:
         return 0, total_obtained - final_spent, final_spent
     
@@ -449,7 +451,6 @@ def apply_hard_save(goal_list):
     for goal in remaining_goals:
         additional_consumables[f"Hard Save - {goal.name}"] = goal.get_hard_save()
 
-
 def initialize_goals(c):
     for g in all_goals:
         all_goals[g].reset_subgoals(c)
@@ -479,13 +480,38 @@ def get_route_breakdown(goals_on_line, config):
     if "Shade Soul" in config:
         goals_on_route.add("Shade Soul")
     if "Lantern Route" in config:
-        goals_on_route.add("Lantern Route Enjoyer")
         goals_on_route.add("Lumafly Lantern") # Required to get lantern and spend the 1800 geo
         goals_on_route.add("KSS") # Required to spend 300 geo
-    if "Dive Route" in config:
-        goals_on_route.add("Dive Route Enjoyer")
+    if "Left Side Dive Route" in config:
+        goals_on_route.add("CSS")
         goals_on_route.add("False Knight")
         goals_on_route.add("Dive Escape")
+        goals_on_route.add("Desolate Dive")
+        goals_on_route.add("Soul Master")
+    if "Right Side Dive Route" in config:
+        goals_on_route.add("KSS") # Required to spend 300 geo
+        goals_on_route.add("Dive Escape")
+        goals_on_route.add("Desolate Dive")
+        goals_on_route.add("Soul Master")
+    if "Early Queens" in config:
+        goals_on_route.add("QSS")
+
+    # Determining Early game route
+    if "Left Side Dive Route" in config and "Early Queens" in config:
+        goals_on_route.add("Left Side Dive Route Early Queens")
+    elif "Left Side Dive Route" in config and "Skip Queens" in config:
+        goals_on_route.add("Left Side Dive Route Skip Queens")
+    elif "Right Side Dive Route" in config and "Early Queens" in config:
+        goals_on_route.add("Right Side Dive Route Early Queens")
+    elif "Right Side Dive Route" in config and "Skip Queens" in config:
+        goals_on_route.add("Right Side Dive Route Skip Queens")
+    elif "Lantern Route" in config and "Early Queens" in config:
+        goals_on_route.add("Lantern Route Early Queens")
+    elif "Lantern Route" in config and "Skip Queens" in config:
+        goals_on_route.add("Lantern Route Skip Queens")
+    else:
+        print(f"Invalid Route From Config. Goals: {config}")
+        exit(-1)
 
     required_goals = get_all_necessary_goals(goals_on_route)
 
@@ -502,7 +528,7 @@ def get_route_breakdown(goals_on_line, config):
     route_breakdown["Dream Tree Tax"] = dream_tree_tax(required_goals) # Dream Trees
     route_breakdown["--Total Spent Geo"] = total_geo
 
-    determine_lemm_sell(route_breakdown, required_goals, extra_geo)
+    determine_lemm_sell(route_breakdown, required_goals, extra_geo, config)
 
     # Add all goals (includes base route)
     for g in required_goals:
@@ -513,12 +539,12 @@ def get_route_breakdown(goals_on_line, config):
 
     return route_breakdown
 
-def determine_lemm_sell(route_breakdown, required_goals, extra_geo):
+def determine_lemm_sell(route_breakdown, required_goals, extra_geo, config):
 
-    if ("Dive Route Enjoyer" in required_goals and extra_geo < 1450) or ("Lantern Route Enjoyer" in required_goals and extra_geo < 800):
-        required_goals.add("Lemm Sell")
+    if ("Left Side Dive Route" in config and extra_geo < 1250) or ("Lantern Route" in config and extra_geo < 800) or ("Right Side Dive Route" in config and extra_geo < 800):
+        required_goals.add(all_goals["Sell Lemm"])
         
-        # If we're selling Lemm and getting king's idols, the extra geo is fine
+        # TODO - should be removed once we have per relic tax. This is an estimation to avoid recalculating geo tax
         if "Collect 3 King's Idols" in required_goals:
             route_breakdown["Geo Tax"] = max(0, route_breakdown["Geo Tax"] - (3 * 16)) # 3 seconds per 100 geo times 1600 geo [two extra idols]
 
@@ -749,7 +775,7 @@ def all_possible_line_combinations(number_of_lines):
     return itertools.combinations(["R1", "R2", "R3", "R4", "R5", "C1", "C2", "C3", "C4", "C5", "TLBR", "TRBL"], number_of_lines)
 
 def all_config_combinations():
-    return itertools.product(damage_source, initial_route, dv_entrance, wings)
+    return itertools.product(damage_source, initial_route, dv_entrance, wings, early_qss)
 
 # Adds new line config to our dictionary, if it is already there only update if it is bigger
 def update_best_times(d, lines, time, config, route_breakdown, additional_consumables):
@@ -916,7 +942,7 @@ def main_estimate_timing():
     read_discounts("goal_requirements.tsv")
     read_consumables("goal_requirements.tsv")
 
-    assumed_goals = ['KSS', 'Dream Nail', 'Desolate Dive', 'Dive Route Enjoyer', 'Crystal Heart', 'Sell Lemm']
+    assumed_goals = ['KSS', 'Dream Nail', 'Desolate Dive', 'Dive Route Early Queens', 'Crystal Heart', 'Sell Lemm']
 
     assumed_goals_time = 1000000
 
@@ -940,7 +966,7 @@ def main_estimate_timing():
 
         print(f"{g}///{min_time - assumed_goals_time}")
 
-    exit()
+    exit(0)
 
 if __name__ == '__main__':
 
