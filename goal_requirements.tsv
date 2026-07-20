@@ -3,8 +3,8 @@ False Knight + Brooding Mawlek	Shade Soul - 49, False Knight	VS - 55, False Knig
 Soul Master	Left Side Dive Route - 0	Lantern Route, VS - Inner Sanctum, 55	Lantern Route, DDark - Inner Sanctum, 55	Lantern Route, Shade Soul - Inner Sanctum, 36	Right Side Dive Route - 0					
 Soul Tyrant	Left Side Dive Route, Shade Soul - 155, Dream Nail	Left Side Dive Route, DDark - Dream Nail, 250	Left Side Dive Route, VS - Dream Nail, TE Shade Skip, 195	Lantern Route, Shade Soul - Desolate Dive, Dream Nail, 115	Lantern Route, VS - Desolate Dive, Dream Nail, 195	Lantern Route, DDark - Desolate Dive, Dream Nail, 175	Right Side Dive Route, VS - Dream Nail, 195	Right Side Dive Route, DDark - Dream Nail, 195	Right Side Dive Route, Shade Soul - Dream Nail, 155	Essence !! 300
 Hornet 2	Shade Soul - KSS, 123	DDark - KSS, 123	VS - KSS, 160							
-Crystal Guardian 1	28									
-Crystal Guardian 2	Wings - Crystal Guardian 1, 93	Wingless - Crystal Guardian 1, 165								
+Crystal Guardian 1	28	Geo !! 385								
+Crystal Guardian 2	Wings - Crystal Guardian 1, 93	Wingless - Crystal Guardian 1, 165	Geo !! 550							
 Dung Defender	DDark - 70, WW Bench	Shade Soul - 91, WW Bench	VS - 121, WW Bench							
 Flukemarm	DDark - 55, WW Bench, Dive Escape	Shade Soul - 50, Dive Escape, WW Bench	VS - Dive Escape, WW Bench, 61							
 Nosk	DDark - Deepnest Hot Spring, 120	Shade Soul - Deepnest Hot Spring, 114	VS - Deepnest Hot Spring, 155							
@@ -48,7 +48,7 @@ Tram Pass + Visit all 5 Tram Stations	36, Ride Tram to Hive
 Lumafly Lantern	Lantern Route - 0	Left Side Dive Route - 3	Right Side Dive Route - 3	Geo !! -1800						
 All Grubs: Xroads (5) + Fog Canyon (1)	63, SWFC, Archives	Grubs !! 6								
 Save the 5 grubs in CoT	Desolate Dive, KSS, 125	Grubs !! 5								
-All Grubs: Greenpath (4) + Fungal (2)	Early Queens - Waterfall, Spore Shroom Area, 90	Skip Queens - Stone Sanctuary, Spore Shroom Area, 180	Grubs !! 6							
+All Grubs: Greenpath (4) + Fungal (2)	QSS, Spore Shroom Area, Stone Sanctuary, 113									
 Save the 7 grubs in Crystal Peak	Peaks Elevator, Descending Dark, 82	Grubs !! 7								
 Save the 3 grubs in Waterways	Tram Pass, WW Bench, 125	Grubs !! 3								
 Save the 3 grubs in Queen's Garden	36, Upper QG Room, Unlock Queen's Garden Stag	Grubs !! 3								
@@ -188,7 +188,6 @@ Left Side Dive Route Early Queens	1391	Geo!!3215	Max Geo !! 270
 Left Side Dive Route Skip Queens	1306	Geo!!2765	Max Geo !! 270							
 Right Side Dive Route Early Queens	1475	Geo!!4120	Max Geo !! 270							
 Right Side Dive Route Skip Queens	1415	Geo!!3470	Max Geo !! 270							
-Waterfall	56									
 Dive Escape	Left Side Dive Route - 0	Lantern Route - Desolate Dive, 105	Right Side Dive Route - 0							
 Salubra Revisit	Left Side Dive Route - 0	Lantern Route - 21	Right Side Dive Route - 0							
 Complete the Ancestral Mound Root	Wings - Dream Nail, 92	Wingless - Dream Nail, 110								
@@ -237,8 +236,6 @@ Kill 2 Soul Warriors; Lantern Route Early Queens; Inner Sanctum	21
 Kill 2 Soul Warriors; Lantern Route Skip Queens; Inner Sanctum	21									
 Sharp Shadow; Tram Pass; Monarch Wings	-30									
 Basin; Ride Tram to Hive	40									
-Stone Sanctuary; Waterfall	45									
-Waterfall; Hunter's Journal	16									
 Complete the Ancestral Mound Root ; SWFC	5									
 Kill 4 Mimics ; Monarch Wings ; Crystal Guardian 2	20									
 										

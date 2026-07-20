@@ -406,7 +406,8 @@ def geo_tax(goal_list, config):
     if geo_debt > 0:
         # Integral from g0 to g1 of 0.01 + .000009g dg
         # Todo - change integral to just be additional money
-        time_to_get_remaining_geo = (0.01) * (final_spent - total_obtained) + (0.0000045) * (final_spent * final_spent - total_obtained * total_obtained)
+
+        time_to_get_remaining_geo = (final_spent - total_obtained) * (final_spent - total_obtained) // 60000
         return int(time_to_get_remaining_geo), 0, final_spent
     else:
         return 0, total_obtained - final_spent, final_spent
