@@ -11,7 +11,7 @@ import cProfile
 import pstats
 
 # Debugging
-print_all_breakdowns = False
+print_all_breakdowns = True
 timing_debug = False
 number_of_lines = 3
 
@@ -522,7 +522,7 @@ def get_route_breakdown(goals_on_line, config):
     route_breakdown["Essence Tax"], essence_obtained = essence_tax(required_goals, Goal.get_essence) # Essence
     route_breakdown["Pale Ore Tax"] = pale_ore_tax(required_goals, essence_obtained) # Pale Ore
     route_breakdown["Grub Tax"] = grub_tax(required_goals) # Grubs
-    route_breakdown["Vessel Fragment Tax"] = tax(required_goals, Goal.get_vessel, 40) # Vessel Fragments
+    route_breakdown["Vessel Fragment Tax"] = tax(required_goals, Goal.get_vessel, 0) # Vessel Fragments
     route_breakdown["Mask Shard Tax"], extra_geo = mask_shard_tax(required_goals, extra_geo) # Mask Shards
     route_breakdown["Simple Key Tax"], extra_geo = simple_key_tax(required_goals, extra_geo)
     route_breakdown["King's Idol Tax"] = kings_idol_tax(required_goals, essence_obtained)
