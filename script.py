@@ -3,6 +3,7 @@ from collections import deque
 import sys
 import requests
 from bs4 import BeautifulSoup
+import argparse
 import json
 
 import cProfile
@@ -941,19 +942,38 @@ def print_route_breakdown(route_breakdown):
         if route_breakdown[k] != 0 or "-" in k: # Ignore anything that doesn't take time if it's not a consumable
             print(f"\t\t{k} \t{route_breakdown[k]}")
 
-def parse_user_input(user_input):
-    if len(user_input) == 1:
-        return None, []
-    board_url = None
+def parse_line_string(line_string):
     lines = []
-    for str_input in user_input[1:]:
-        if (str_input.startswith("https://") or str_input.startswith("http://")):
-            board_url = str_input
-        else:
-            lines.append(str_input)
-            
-    lines = [tuple(lines)] if lines else []
-    return board_url, lines
+    i = 1
+    while i < len(line_string):
+        line = line_string[i-1:i+1]
+        if line == "tl":
+            line += "br"
+            i += 2
+        elif line == "bl":
+            line += "tr"
+            i += 2
+        lines.append(line.upper())
+        i += 2
+    return tuple(lines)
+
+def parse_user_input(user_input):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("board_url", type=str, help="Board link (positional argument)", nargs='?', default="")
+    parser.add_argument("--lines", "-l", type=str, help="One set of lines to parse, with no spaces e.g. 'r1c1c2'", default="")
+    parser.add_argument("--compare", "-c", type=str, nargs=2, help="Two sets of lines to compare, e.g. 'r1c1c2 r1c1tlbr'", default="")
+
+    args = parser.parse_args()
+    board_url = args.board_url
+    lines = parse_line_string(args.lines)
+    if args.compare:
+        compare_first_lines_arg, compare_second_lines_arg = args.compare
+        compare_first_lines = parse_line_string(compare_first_lines_arg)
+        compare_second_lines = parse_line_string(compare_second_lines_arg)
+        return board_url, lines, (compare_first_lines, compare_second_lines)
+    else:
+        return board_url, lines, []
+
 
 def get_board_from_url(url):
     if url.endswith('/'):
@@ -983,6 +1003,20 @@ def print_additional_consumables():
     for k, v in additional_consumables.items():
         print(f"{k}: {v}")
 
+def get_line_comparison(first_lines, second_lines):
+    shared = {}
+    first = first_lines["route_breakdown"]
+    second = {}
+
+    for key, val in second_lines["route_breakdown"].items():
+        if key in first and first[key] == val:
+            shared[key] = val
+            del first[key]
+        else:
+            second[key] = val
+    
+    return shared, first, second
+
 def main():
 
     best_times = {}
@@ -992,7 +1026,7 @@ def main():
     read_discounts("goal_requirements.tsv")
     read_consumables("goal_requirements.tsv")
 
-    board_url, user_lines = parse_user_input(sys.argv)
+    board_url, user_lines, compare_lines = parse_user_input(sys.argv)
     if board_url is None:
         print("Loading board goals from file", flush=True)
         board_goals = get_board_goals("board_goals.txt")
@@ -1004,8 +1038,10 @@ def main():
 
     # Determine Lines
     if (user_lines):
-        print(f"Using User-Submitted lines: {user_lines[0]}")
-        lines_to_check = user_lines
+        print(f"Using User-Submitted lines: {user_lines}")
+        lines_to_check = [user_lines]
+    elif (compare_lines):
+        lines_to_check = compare_lines
     else:
         lines_to_check = all_line_combinations(board_goals, 4)
 
@@ -1029,25 +1065,49 @@ def main():
             update_best_times(best_times, lines, time, config, route_breakdown, additional_consumables)
 
 
-    best_row_combo = None
-    best_route = {"time": 1000000, "config": "Invalid", "route_breakdown": "Invalid"}
+    if compare_lines:
+        first_lines_result = best_times[compare_lines[0]]
+        second_lines_result = best_times[compare_lines[1]]
+        time_delta = second_lines_result["time"] - first_lines_result["time"]
+        faster_lines = compare_lines[0]
+        if time_delta < 0:
+            time_delta *= -1
+            faster_lines = compare_lines[1]
+        shared_breakdown, first_breakdown, second_breakdown = get_line_comparison(first_lines_result, second_lines_result)
+        first_exclusive_time = sum(first_breakdown.values()) - (first_breakdown["--Total Spent Geo"] if "--Total Spent Geo" in first_breakdown else 0)
+        second_exclusive_time = sum(second_breakdown.values()) - (second_breakdown["--Total Spent Geo"] if "--Total Spent Geo" in second_breakdown else 0)
+        print()
+        print(f"{" ".join(compare_lines[0])}: {first_lines_result["time"]}")
+        print(f"{" ".join(compare_lines[1])}: {second_lines_result["time"]}")
+        print(f"{" ".join(faster_lines)} is faster by {time_delta}")
+        
+        print(f"Shared breakdown ({sum(shared_breakdown.values())}):")
+        print_route_breakdown(shared_breakdown)
+        print(f"{compare_lines[0]} breakdown ({first_exclusive_time}):")
+        print_route_breakdown(first_breakdown)
+        print(f"{compare_lines[1]} breakdown ({second_exclusive_time}):")
+        print_route_breakdown(second_breakdown)
 
-    sorted_list = sorted([(key, value) for key, value in best_times.items()], key=lambda item: item[1]["time"], reverse=True)
+    else:
+        best_row_combo = None
+        best_route = {"time": 1000000, "config": "Invalid", "route_breakdown": "Invalid"}
+
+        sorted_list = sorted([(key, value) for key, value in best_times.items()], key=lambda item: item[1]["time"], reverse=True)
+        
+        for row_combination, route in sorted_list:
+            print(f"Best time for {row_combination}:\t{route['time']}")
     
-    for row_combination, route in sorted_list:
-        print(f"Best time for {row_combination}:\t{route['time']}")
+        best_row_combo = row_combination
+        best_route = route
 
-    best_row_combo = row_combination
-    best_route = route
-
-    print()
-    print(f"Best Rows: \t {best_row_combo}")
-    print(f"Estimated Time: \t {best_route['time']}")
-    print(f"Suggested Route: \t {best_route['config']}")
-    print(f"Time breakdown:")
-    print_route_breakdown(best_route["route_breakdown"])
-    print(f"Consumables Chosen:")
-    print_route_breakdown(best_route["additional_consumables"])
+        print()
+        print(f"Best Rows: \t {best_row_combo}")
+        print(f"Estimated Time: \t {best_route['time']}")
+        print(f"Suggested Route: \t {best_route['config']}")
+        print(f"Time breakdown:")
+        print_route_breakdown(best_route["route_breakdown"])
+        print(f"Consumables Chosen:")
+        print_route_breakdown(best_route["additional_consumables"])
 
 def main_estimate_timing():
 
