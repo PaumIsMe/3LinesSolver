@@ -11,7 +11,7 @@ import cProfile
 import pstats
 
 # Debugging
-print_all_breakdowns = True
+print_all_breakdowns = False
 timing_debug = False
 number_of_lines = 3
 

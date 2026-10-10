@@ -13,7 +13,7 @@ Collector	DDark - Edge Hub, 107, Pick up the Love Key	Shade Soul - 127, Edge Hub
 Pick up the Love Key	24, QG Hub									
 Traitor Lord	DDark - 89, Unlock Queen's Garden Stag, Shade Cloak Escape	Shade Soul - 93, Unlock Queen's Garden Stag, Shade Cloak Escape	VS - 115, Unlock Queen's Garden Stag, Shade Cloak Escape							
 Uumuu	Shade Soul - 51, Archives	DDark - 69, Archives	VS - 86, Archives							
-Watcher Knights	VS - 131	Shade Soul - 111	DDark - 111							
+Watcher Knights	VS - KSS, 131	Shade Soul - KSS, 111	DDark - KSS, 111							
 Lurien	40, Watcher Knights, Dream Nail	Hard Save !! 64								
 Monomon	31, Uumuu, Dream Nail	Hard Save !! 55								
 Herrah	Inner Beast's Den, Dream Nail, 13	Hard Save !! 21								
@@ -30,7 +30,7 @@ Broken Vessel	Shade Soul - Basin, 113	DDark - Basin, 113	VS - Basin, 130
 Lost Kin	Shade Soul - 94, Dream Nail, Broken Vessel	VS - 124, Dream Nail, Broken Vessel	DDark - 94, Dream Nail, Broken Vessel	Essence !! 400						
 Shade Soul	Left Side Dive Route - 69	Lantern Route - Sell Lemm, 95	Right Side Dive Route - Sell Lemm, 95	Geo !! -600						
 Abyss Shriek	Howling Wraiths, Abyss, 23									
-Howling Wraiths	96									
+Howling Wraiths	QSS, 96									
 Desolate Dive	Left Side Dive Route - 0	Lantern Route - Soul Master, 50	Right Side Dive Route - 0	Hard Save !! 105						
 Nail 2	Talk to Nailsmith	Geo !! -1050								
 Nail 3	Nail 2	Geo !! -2000								
@@ -43,21 +43,21 @@ Dash Slash	Oro Bench, 23	Geo !! -800
 Monarch Wings	Broken Vessel, 0									
 Crystal Heart	0									
 Shade Cloak	80, Basin, Brand	Hard Save !! 120								
-Isma's Tear	60									
+Isma's Tear	KSS, 60									
 Tram Pass + Visit all 5 Tram Stations	36, Ride Tram to Hive									
 Lumafly Lantern	Lantern Route - 0	Left Side Dive Route - 3	Right Side Dive Route - 3	Geo !! -1800						
 All Grubs: Xroads (5) + Fog Canyon (1)	63, SWFC, Archives	Grubs !! 6								
 Save the 5 grubs in CoT	Desolate Dive, KSS, 125	Grubs !! 5								
 All Grubs: Greenpath (4) + Fungal (2)	QSS, Spore Shroom Area, Stone Sanctuary, 113									
 Save the 7 grubs in Crystal Peak	Peaks Elevator, Descending Dark, 82	Grubs !! 7								
-Save the 3 grubs in Waterways	Tram Pass, WW Bench, 125	Grubs !! 3								
+Save the 3 grubs in Waterways	Tram Pass, WW Bench, Ride Tram to Hive, 80	Grubs !! 3								
 Save the 3 grubs in Queen's Garden	36, Upper QG Room, Unlock Queen's Garden Stag	Grubs !! 3								
 Save the 5 grubs in Deepnest	Inner Beast's Den, Deepnest Hot Spring, 66	Grubs !! 5								
 Save 15 grubs	0	Grubs !! -15								
 Save 20 grubs	0	Grubs !! -20								
 Obtain fountain vessel fragment	Basin, 25, Sell Lemm	Vessel Fragment !! 1	Geo !! -3000							
 Obtain 3 extra notches	SWFC, Salubra Revisit, 35	Geo !! -120								
-Obtain 1 extra soul vessel	31, Sell Lemm	Geo !! -1450	Vessel Fragment !! -1							
+Obtain 1 extra soul vessel	60, Sell Lemm	Geo !! -1450	Vessel Fragment !! -1							
 Obtain 1 extra mask	0									
 Obtain 2 extra masks	0									
 Have 5 Wanderer's Journals	Lantern Route - 43	Left Side Dive Route - KSS, Sell Lemm, 24	Right Side Dive Route - 43	Geo !! 600						
@@ -84,8 +84,8 @@ Talk to Hornet at CoT Statue + Herrah	Hornet 2, Inner Beast's Den, Dream Nail
 Watch Cloth Die	Traitor Lord, 37									
 Kill Myla	22									
 Spend 3000 geo	0	Max Geo !! -3000								
-Spend 4000 geo	10	Max Geo !! -4000								
-Spend 5000 geo	20	Max Geo !! -5000								
+Spend 4000 geo	0	Max Geo !! -4000								
+Spend 5000 geo	0	Max Geo !! -5000								
 Pay for 6 tolls	20	Geo !! -200								
 Longnail + MoP	Mantis Lords, 15									
 Fragile Heart, Greed, and Strength	Leg Eater, 17	Geo !! -1286								
@@ -108,6 +108,7 @@ Collect 500 essence	Dream Nail	Essence !! -500
 Dream Wielder	Collect 500 essence, Seer Rewards	Essence !! -500								
 Interact with 5 Cornifer locations	15									
 Flukenest	Flukemarm, 3									
+Fake Goal	3									
 Stag Nest vessel fragment	Wings - Cliffs, 20	Wingless - Cliffs, 23	Vessel Fragment !! 1							
 Complete 4 full dream trees	Dream Nail, 0	Essence !! 100								
 Kill 2 Soul Warriors	Left Side Dive Route - Shade Soul	Lantern Route - Shade Soul, 41	Right Side Dive Route - Shade Soul							
@@ -182,8 +183,8 @@ Dashmaster	33
 Peaks Elevator	Wings - 20	Wingless - Crystal Guardian 1, 43								
 Edge Hub	KSS, 41									
 SWFC	32									
-Lantern Route Early Queens	1229	Geo!!3690	Max Geo !! 320							
-Lantern Route Skip Queens	1169	Geo!!3040	Max Geo !! 320							
+Lantern Route Early Queens	1229	Geo!!3690	Max Geo !! 320						
+Lantern Route Skip Queens	1169	Geo!!3040	Max Geo !! 320					
 Left Side Dive Route Early Queens	1391	Geo!!3215	Max Geo !! 270							
 Left Side Dive Route Skip Queens	1306	Geo!!2765	Max Geo !! 270							
 Right Side Dive Route Early Queens	1475	Geo!!4120	Max Geo !! 270							
@@ -238,13 +239,13 @@ Sharp Shadow; Tram Pass; Monarch Wings	-30
 Basin; Ride Tram to Hive	40									
 Complete the Ancestral Mound Root ; SWFC	5									
 Kill 4 Mimics ; Monarch Wings ; Crystal Guardian 2	20									
-										
+Howling Wraiths ; QG Hub	15									
 										
 										
 										
 CONSUMABLES										
 										
-Idol - Zote	Rescue Zote in Deepnest - 6	Deepnest Hot Spring - 82	168							
+Idol - Zote	Rescue Zote in Deepnest - 6	Deepnest Hot Spring - 76	168							
 Idol - Great Hopper	Edge Hot Spring - 11	Edge Hub - 35	76							
 Idol - Lurker	Pale Lurker - 7	Edge Hot Spring - 22	Edge Hub - 75	116						
 Idol - Cliffs	Cliffs - 15	Thorns of agony + Baldur Shell + Spore Shroom - 22	65							
@@ -268,7 +269,7 @@ Mask Shard - CG2	Crystal Guardian 2 - 9	Monarch Wings, Crystal Guardian 1 - 103	
 Pale Ore - Essence	Seer Rewards - 0	Dream Nail - 120	300							
 Pale Ore - Nosk	Nosk - 15	Deepnest Hot Spring, Shade Soul - 129	Deepnest Hot Spring, Descending Dark - 135	Deepnest Hot Spring, Descending Dark - 170	256					
 Pale Ore - Crown	Hallownest Crown Pale Ore - 0	78								
-Pale Ore - Basin	Basin - 41	KSS - 60	120							
+Pale Ore - Basin	Basin - 41	KSS - 60	120	Save the 2 grubs in Basin - 30						
 										
 Simple Key - Lurker	Pale Lurker - 3	Shade Soul, Edge Hot Spring - 38	DDark, Edge Hot Spring - 53	Edge Hot Spring - 64	Shade Soul, Edge Hub - 81	DDark, Edge Hub - 106	Edge Hub - 117	Shade Soul - 122	DDark - 147	158
 Simple Key - Storerooms	CSS - 14	Shade Soul - 33	Sell Lemm - 66	KSS - 103						
@@ -280,13 +281,12 @@ Essence - Elder Hu 100	Elder Hu - 0	75
 Essence - Gorb 100	Gorb - 0	Cliffs - 25	75							
 Essence - Marmu 150	Marmu - 0	Unlock Queen's Garden Stag - 40	QG Hub - 182	264						
 Essence - No Eyes 200	No Eyes - 0	Stone Sanctuary, Lumafly Lantern - 58	Stone Sanctuary - 114	Lumafly Lantern - 103	159					
-Essence - Galien 200	Galien - 0	Deepnest Hot Spring - 68	154							
+Essence - Galien 200	Galien - 0	Deepnest Hot Spring - 68	154	Tram Pass - 32						
 Essence - Markoth 250	Markoth - 0	Shade Cloak Escape - 90	Shade Cloak, Wings - 165	Shade Cloak - 210	592					
 Essence - Failed Champion 300	Failed Champion - 0	Shade Soul, False Knight - 131	Shade Soul - 172	DDark, False Knight - 131	DDark - 172	3600				
 Essence - Soul Tyrant 300	Soul Tyrant - 0	Soul Master - 195	1000							
 Essence - Lost Kin 400	Lost Kin - 0	Broken Vessel - 110	Basin - 230	270						
 Essence - Dream Trees 100	Complete 4 full dream trees - 0	200								
-										
 										
 Dream Tree - RG	29									
 Dream Tree - Basin	Basin - 52	75								
@@ -298,11 +298,7 @@ Dream Tree - Glade	62
 Dream Tree - QG Main	QG Hub - 35									
 Dream Tree - AMound	Complete the Ancestral Mound Root - 0	Wings - 92	110							
 Dream Tree - Greenpath	Upper QG Room - 87	Complete the Greenpath Root - 0	1000							
-										
-										
-										
-										
-										
+Dream Tree - Hive	Inner Hive - 25									
 										
 Grub - XRoads Wall	3	All Grubs: Xroads (5) + Fog Canyon (1) - 0								
 Grub - XRoads Tram	14	All Grubs: Xroads (5) + Fog Canyon (1) - 0								
@@ -322,15 +318,15 @@ Grub - CoT KSS	14	Save the 5 grubs in CoT - 0
 Grub - CoT Guarded	13	Save the 5 grubs in CoT - 0								
 Grub - CoT Watcher Knights	68	Save the 5 grubs in CoT - 0								
 Grub - CoT Lemm	CSS - 1	Inner Sanctum - 1	20	Save the 5 grubs in CoT - 0						
-Grub - CoT Dive	Dive Escape - 4	Desolate Dive - 33	100	Save the 5 grubs in CoT - 0						
+Grub - CoT Dive	Dive Escape - 4	Desolate Dive - 33	100	Save the 5 grubs in CoT - 0	Soul Tyrant - 15					
 										
 Grub - Peaks Spike Grub	6	Save the 7 grubs in Crystal Peak - 0								
 Grub - Peaks Top Right	50	Hallownest Crown Pale Ore - 46	Save the 7 grubs in Crystal Peak - 0							
-Grub - Peaks CDash Grub	16	Descending Dark - 6	Save the 7 grubs in Crystal Peak - 0							
-Grub - Peaks Crushers Upper	14	Descending Dark - 8	Save the 7 grubs in Crystal Peak - 0							
+Grub - Peaks CDash Grub	16	Descending Dark - 6	Save the 7 grubs in Crystal Peak - 0	Deep Focus + Quick Focus - 6						
+Grub - Peaks Crushers Upper	14	Descending Dark - 8	Save the 7 grubs in Crystal Peak - 0	Deep Focus + Quick Focus - 3						
 Grub - Peaks Crushers Lower	20	Descending Dark - 0	Save the 7 grubs in Crystal Peak - 0							
 Grub - Peaks DDark	Descending Dark - 8	65	Save the 7 grubs in Crystal Peak - 0							
-Grub - Peaks Elevator	42	Peaks Elevator - 15	Save the 7 grubs in Crystal Peak - 0							
+Grub - Peaks Elevator	42	Peaks Elevator - 15	Kill 4 Mimics - 3	Save the 7 grubs in Crystal Peak - 0						
 										
 Grub - Collector 1	Collector - 3	Edge Hub - 70	Love Key - 83							
 Grub - Collector 2	Collector - 3	Edge Hub - 70	Love Key - 83							
@@ -354,7 +350,7 @@ Grub - QG Top	Upper QG Room - 18	Queen's Garden Stag - 66
 										
 Grub - Cliffs Baldur Shell	Cliffs - 24	Thorns of agony + Baldur Shell + Spore Shroom - 11	Greenpath Stag, Monarch Wings - 32	100						
 										
-Grub - RG Crypts	Desolate Dive, Dream Nail - 16	Soul Eater + Soul Catcher - 7	Give Flower to Elderbug - 7							
+Grub - RG Crypts	Dive Escape, Dream Nail - 16	Soul Eater + Soul Catcher - 7	Give Flower to Elderbug - 7							
 										
 Grub - Waterways Center	WW Bench - 8	Talk to Tuk - 18								
 Grub - Waterways Isma	Isma's Tear - 9	Talk to Emilitia (shortcut out of sewers) - 35	100							
